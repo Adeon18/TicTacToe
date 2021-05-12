@@ -1,5 +1,5 @@
 """
-Board Module
+TicTacToe Board Module
 """
 import copy
 
@@ -8,7 +8,7 @@ from btree import LinkedBinaryTree
 
 class Board:
     """
-    A TicTacToe board representation
+    A TicTacToe board
     """
     PC_SYMBOL = "0"
     USR_SYMBOL = "x"
@@ -28,7 +28,6 @@ class Board:
 
         return strr[:-1]
 
-    # def get_status
     def check_horizontal(self, board, player):
         """
         Check fo horisontal status
@@ -127,7 +126,7 @@ class Board:
             for j, _ in enumerate(self._board[i]):
                 if self._board[i][j] == " ":
                     positions.append((i, j))
-        print(positions)
+
         return positions
 
     def build_tree(self, board, player):
@@ -142,9 +141,13 @@ class Board:
             if len(positions) == 1:
                 pos = positions[0]
                 board1 = copy.deepcopy(board)
-                board1.make_move(pos, self.PC_SYMBOL)
                 board2 = copy.deepcopy(board)
-                board2.make_move(pos, self.PC_SYMBOL)
+                if prev_move == self.USR_SYMBOL:
+                    board1.make_move(pos, self.PC_SYMBOL)
+                    board2.make_move(pos, self.PC_SYMBOL)
+                elif prev_move == self.PC_SYMBOL:
+                    board1.make_move(pos, self.USR_SYMBOL)
+                    board2.make_move(pos, self.USR_SYMBOL)
                 tree.insert_left(board1)
                 tree.insert_right(board2)
                 return
@@ -171,8 +174,7 @@ class Board:
         points_right = self.get_points(tree.right)
         if points_left > points_right:
             return tree.left.key
-        else:
-            return tree.right.key
+        return tree.right.key
 
     def get_points(self, tree):
         """
@@ -182,31 +184,21 @@ class Board:
 
         def recurse(tree, points):
             board = tree.key
-            board_result = self.get_result(board)
             # If continuing
-            if board_result == 2:
+            if board.get_status() == "continue":
                 points += recurse(tree.left, points)
                 points += recurse(tree.right, points)
                 return points
             # If somebody won
-            else:
-                points += board_result
+            elif board.get_status() == self.PC_SYMBOL:
+                points += 1
                 return points
-
+            elif board.get_status() == self.USR_SYMBOL:
+                points -= 1
+                return points
+            else:
+                return points
         return recurse(tree, points)
-
-    def get_result(self, board):
-        """
-        Get the number result from get_status()
-        """
-        winner = board.get_status()
-        if winner == self.PC_SYMBOL:
-            return 1
-        elif winner == self.USR_SYMBOL:
-            return -1
-        if not board.get_positions():
-            return 0
-        return 2
 
 
 if __name__ == "__main__":

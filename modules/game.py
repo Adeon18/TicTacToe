@@ -12,7 +12,7 @@ while result == "continue":
         if player == boardd.USR_SYMBOL:
             while True:
                 inputt = input("Enter first pos,second pos: ").split(',')
-                coords = (int(inputt[0]), int(inputt[1]))
+                coords = (int(inputt[1]), int(inputt[0]))
                 try:
                     boardd.make_move(coords, boardd.USR_SYMBOL)
                     break

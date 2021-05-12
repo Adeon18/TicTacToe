@@ -1,3 +1,6 @@
+"""
+Binary tree for building the game tree
+"""
 from btnode import BTNode
 
 

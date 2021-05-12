@@ -1,5 +1,6 @@
-
-
+"""
+Tree node which I did not use but it is here nontheless :/
+"""
 class BTNode:
     """
     A simple node for the binary tree
